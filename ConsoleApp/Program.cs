@@ -14,33 +14,33 @@ namespace ConsoleApp
             do
             {
                 Console.WriteLine("[A]gregar autor | [M]odificar autor | [E]liminar autor | [V]er autores | [S]alir");
-            ;
-            Console.Write("Selecciona una opcion: ");
-            lectura = char.ToUpper(Console.ReadKey().KeyChar);
-            Console.WriteLine();
-            switch (lectura)
-            {
-                case 'A':
-                    AddAuthor();
-                    break;
-                case 'M':
-                    ModifyAuthor();
-                    break;
-                case 'E':
-                    DeleteAuthor();
-                    break;
-                case 'V':
-                    ShowAuthors("Autores registrados");
-                    break;
-                case 'S':
-                    Console.WriteLine("Adios. Programa finalizado.");
-                    break;
-                default:
-                    break;
-            }
-            Console.WriteLine();
-        } while (lectura != 'S');
-        Console.WriteLine("");
+                ;
+                Console.Write("Selecciona una opcion: ");
+                lectura = char.ToUpper(Console.ReadKey().KeyChar);
+                Console.WriteLine();
+                switch (lectura)
+                {
+                    case 'A':
+                        AddAuthor();
+                        break;
+                    case 'M':
+                        ModifyAuthor();
+                        break;
+                    case 'E':
+                        DeleteAuthor();
+                        break;
+                    case 'V':
+                        ShowAuthors("Autores registrados");
+                        break;
+                    case 'S':
+                        Console.WriteLine("Adios. Programa finalizado.");
+                        break;
+                    default:
+                        break;
+                }
+                Console.WriteLine();
+            } while (lectura != 'S');
+            Console.WriteLine("");
         }
         static void AddAuthor()
         {
@@ -69,14 +69,54 @@ namespace ConsoleApp
 
         }
 
-        static void ModifyAuthor()
+        private static void ModifyAuthor()
         {
-            Console.WriteLine("Modificando autores...");
+            Console.Write("Proporcione el identificador del autor a modificar: ");
+            int authorId = Convert.ToInt32(Console.ReadLine());
+            var author = context.Authors.FirstOrDefault(a => a.Id == authorId);
+            if (author != null)
+            {
+                Console.WriteLine("Datos actuales del autor:");
+                Console.WriteLine($"Identificador: {author.Id}");
+                Console.WriteLine($"Nombres: {author.FirstName}");
+                Console.WriteLine($"Apellidos: {author.LastName}");
+                Console.WriteLine("Nuevos datos.");
+                Console.Write("Proporcione el nuevo nombre del autor: ");
+                string firstName = Console.ReadLine();
+                Console.Write("Proporcione los apellidos del autor: ");
+                string lastName = Console.ReadLine();
+                author.FirstName = firstName;
+                author.LastName = lastName;
+                context.Authors.Update(author);
+                context.SaveChanges();
+            }
+            else
+            {
+                Console.WriteLine("Lo siento. El autor no existe.");
+            }
+
+
         }
 
-        static void DeleteAuthor()
+        private static void DeleteAuthor()
         {
-            Console.WriteLine("Eliminando autor...");
+            Console.Write("Proporcione el identificador del autor a eliminar: ");
+            int authorId = Convert.ToInt32(Console.ReadLine());
+            var author = context.Authors.FirstOrDefault(a => a.Id == authorId);
+            if (author != null)
+            {
+                Console.WriteLine("Datos actuales del autor:");
+                Console.WriteLine($"Identificador: {author.Id}");
+                Console.WriteLine($"Nombres: {author.FirstName}");
+                Console.WriteLine($"Apellidos: {author.LastName}");
+                context.Authors.Remove(author);
+                context.SaveChanges();
+            }
+            else
+            {
+                Console.WriteLine("Lo siento. El autor a eliminar no existe.");
+            }
+
         }
 
 
